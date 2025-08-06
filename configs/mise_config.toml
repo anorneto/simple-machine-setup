@@ -1,0 +1,9 @@
+[settings]
+idiomatic_version_file_enable_tools = ["python"]
+
+[tools]
+uv = "latest"
+pipx = "latest"
+tlrc = "latest"
+zoxide = "latest"
+starship = "latest"

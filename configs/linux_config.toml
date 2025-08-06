@@ -1,0 +1,12 @@
+[custom_install]
+commands = [
+    { name = "fish", command = "sudo apt-add-repository ppa:fish-shell/release-4 & sudo apt update & sudo apt install -y fish" },
+    { name = "mise", command = "curl https://mise.run | sh" },
+]
+
+[system_install]
+install_command = "apt install -y"
+packages = [{ name = "python-is-python3" }, { name = "git" }]
+
+[post_install]
+commands = ["pipx ensurepath", "echo 'All done!'"]
