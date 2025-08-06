@@ -5,6 +5,7 @@ from typing import Any, Final
 from src.enums import SystemType
 from logging import getLogger
 import tomllib
+import shutil
 
 logger = getLogger(__name__)
 
@@ -28,6 +29,7 @@ class SystemSetupService:
         )
 
         self._install_from_config(config_data=config_data)
+        self._copy_config_files(configs_folder=self.CONFIGS_FOLDER, config_data=config_data)
 
     def _parse_system_configs(self, configs_folder: Path, system_type: SystemType) -> dict[str, Any]:
         config_file: Path = configs_folder / f"{system_type.value}_config.toml"
@@ -49,13 +51,28 @@ class SystemSetupService:
     def _install_from_config(self, config_data: dict[str, Any]) -> None:
         logger.info("Installing packages from configuration data.")
 
-        for install in config_data.get("custom_install", {}).get("commands", []):
-            name = install.get("name")
-            command = install.get("command")
+        for install_config in config_data.get("install", {}).get("commands", [{}]):
+            name: str = install_config.get("name")
+            command: str = install_config.get("command")
 
             result = subprocess.run(["which", name], capture_output=True)
             if result.returncode == 0:
                 logger.info("%s already installed, skipping.", name)
-                # continue
+                continue
             logger.info("> Installing package: %s", name)
             subprocess.run(command, shell=True, check=True)
+
+    def _copy_config_files(self, configs_folder: Path, config_data: dict[str, Any]) -> None:
+        logger.info("Copying configuration files to the home directory.")
+
+        for copy_config in config_data.get("copy", {}).get("files", [{}]):
+            source: Path = configs_folder / copy_config.get("source")
+            destination: Path = Path(copy_config.get("destination")).expanduser()
+
+            if not source.exists():
+                logger.warning("Source file %s does not exist, skipping.", source)
+                continue
+
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            logger.info("> Copying %s to %s", source, destination)
+            shutil.copy2(source.absolute(), destination.absolute())
