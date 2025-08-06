@@ -1,12 +1,24 @@
-[custom_install]
+[install]
 commands = [
-    { name = "fish", command = "sudo apt-add-repository ppa:fish-shell/release-4 & sudo apt update & sudo apt install -y fish" },
+    { name = "fish", command = "echo 'deb http://download.opensuse.org/repositories/shells:/fish/Debian_12/ /' | sudo tee /etc/apt/sources.list.d/shells:fish.list && curl -fsSL https://download.opensuse.org/repositories/shells:fish/Debian_12/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/shells_fish.gpg > /dev/null && sudo apt update && sudo apt install fish" },
     { name = "mise", command = "curl https://mise.run | sh" },
+    { name = "python-is-python3", command = "sudo apt install -y python-is-python3" },
+    { name = "git", command = "sudo apt install -y git" },
+    { name = "unzip", command = "sudo apt install -y zip unzip 7zip" },
 ]
 
-[system_install]
-install_command = "apt install -y"
-packages = [{ name = "python-is-python3" }, { name = "git" }]
+[copy]
+files = [
+    { source = "fish_config.fish", destination = "~/.config/fish/config.fish" },
+    { source = "mise_config.toml", destination = "~/.config/mise/config.toml" },
+    { source = "alias.fish", destination = "~/.config/fish/alias.fish" },
+    #{ source = "starship.toml", destination = "~/.config/starship.toml" },
+]
 
 [post_install]
-commands = ["pipx ensurepath", "echo 'All done!'"]
+commands = [
+    { description = "Set Fish Shell", command = "chsh -s $(which fish)" },
+    { description = "Install Mise Dev-Tools", command = "mise install" },
+    { description = "Ensure Mise Completions on fish", command = "mise completion fish > ~/.config/fish/completions/mise.fish" },
+    { description = "Ensure pipx is in PATH", command = "pipx ensurepath" },
+]
