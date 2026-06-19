@@ -1,0 +1,68 @@
+[tools]
+go = "latest"
+
+[tasks.build]
+description = "Build zimvor for current platform"
+run = """
+VERSION=${VERSION:-dev}
+COMMIT=$(git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+go build -ldflags "-X main.version=$VERSION -X main.commit=$COMMIT -X main.date=$DATE" \
+  -o dist/zimvor ./cmd/zimvor
+"""
+
+[tasks."build:linux-amd64"]
+description = "Build for Linux AMD64"
+run = """
+VERSION=${VERSION:-dev}
+COMMIT=$(git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+GOOS=linux GOARCH=amd64 go build -ldflags "-X main.version=$VERSION -X main.commit=$COMMIT -X main.date=$DATE" \
+  -o dist/zimvor-linux-amd64 ./cmd/zimvor
+"""
+
+[tasks."build:linux-arm64"]
+description = "Build for Linux ARM64"
+run = """
+VERSION=${VERSION:-dev}
+COMMIT=$(git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+GOOS=linux GOARCH=arm64 go build -ldflags "-X main.version=$VERSION -X main.commit=$COMMIT -X main.date=$DATE" \
+  -o dist/zimvor-linux-arm64 ./cmd/zimvor
+"""
+
+[tasks."build:darwin-amd64"]
+description = "Build for macOS AMD64"
+run = """
+VERSION=${VERSION:-dev}
+COMMIT=$(git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+GOOS=darwin GOARCH=amd64 go build -ldflags "-X main.version=$VERSION -X main.commit=$COMMIT -X main.date=$DATE" \
+  -o dist/zimvor-darwin-amd64 ./cmd/zimvor
+"""
+
+[tasks."build:darwin-arm64"]
+description = "Build for macOS ARM64"
+run = """
+VERSION=${VERSION:-dev}
+COMMIT=$(git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+GOOS=darwin GOARCH=arm64 go build -ldflags "-X main.version=$VERSION -X main.commit=$COMMIT -X main.date=$DATE" \
+  -o dist/zimvor-darwin-arm64 ./cmd/zimvor
+"""
+
+[tasks.build-all]
+description = "Cross-compile for all targets"
+depends = ["build:linux-amd64", "build:linux-arm64", "build:darwin-amd64", "build:darwin-arm64"]
+
+[tasks.test]
+description = "Run tests"
+run = "go test ./..."
+
+[tasks.lint]
+description = "Run linter"
+run = "golangci-lint run"
+
+[tasks.clean]
+description = "Remove build artifacts"
+run = "rm -rf dist/"

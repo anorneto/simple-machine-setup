@@ -1,0 +1,50 @@
+[meta]
+os = "darwin"
+description = "macOS workstation"
+
+[[packages]]
+id = "fish"
+binary = "fish"
+install = ["brew install fish"]
+
+[[packages]]
+id = "git"
+install = ["brew install git"]
+
+[[packages]]
+id = "mise"
+binary = "mise"
+install = ["brew install mise"]
+
+[[dotfiles]]
+id = "fish-config"
+source = "dotfiles/fish/config.fish"
+target = "~/.config/fish/config.fish"
+
+[[dotfiles]]
+id = "fish-aliases"
+source = "dotfiles/fish/aliases.fish"
+target = "~/.config/fish/alias.fish"
+
+[[dotfiles]]
+id = "mise-config"
+source = "dotfiles/mise/config.toml"
+target = "~/.config/mise/config.toml"
+
+[[tasks]]
+id = "set-fish-default"
+description = "Set fish as default shell"
+stage = "post"
+command = "chsh -s $(which fish)"
+
+[[tasks]]
+id = "mise-install-tools"
+description = "Install mise tools"
+stage = "post"
+command = "mise install -y"
+
+[[tasks]]
+id = "mise-fish-completions"
+description = "Generate mise fish completions"
+stage = "post"
+command = "mkdir -p ~/.config/fish/completions && mise completion fish > ~/.config/fish/completions/mise.fish"
