@@ -1,6 +1,7 @@
 output:
   - failure
   - summary
+  - execution_out # so we see output of warn-only jobs in the lefthook summary
 
 pre-commit:
   parallel: true
