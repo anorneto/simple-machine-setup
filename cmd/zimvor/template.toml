@@ -1,0 +1,22 @@
+[meta]
+os = "{{.OS}}"
+description = "{{.Description}}"
+
+[[packages]]
+id = "git"
+install = ["{{.GitInstall}}"]
+
+[[packages]]
+id = "fish"
+install = ["{{.FishInstall}}"]
+
+[[dotfiles]]
+id = "gitconfig"
+source = "dotfiles/git/config"
+target = "~/.gitconfig"
+
+[[tasks]]
+id = "example-task"
+description = "Example post-install task"
+stage = "post"
+command = "echo done"

@@ -2,19 +2,46 @@
 idiomatic_version_file_enable_tools = ["python"]
 
 [tools]
-uv = "latest"
-pipx = "latest"
-starship = "latest"
-zoxide = "latest"
-fzf = "latest"
-tlrc = "latest"
-usage = "latest"
-bat = "latest"
-eza = "latest"
-fd = "latest"
-bat-extras = "latest"
-"pipx:detect-secrets" = "latest"
-opencode = "latest"
-go = "latest"
-python = "3.14"
-yq = "latest"
+
+# Programming languages & runtimes
+python = "3.14" # Python language runtime
+go = "latest"   # Go language runtime
+bun = "latest"  # JS/TS runtime + package manager
+
+# Package managers
+uv = "latest"   # Fast Python package manager
+pipx = "latest" # Install Python CLI apps in isolated venvs
+
+# Linters and code analysis
+ast-grep = "latest"      # Structural code search/rewrite via AST patterns
+golangci-lint = "latest" # Aggregated Go linter runner
+rtk = "latest"           # Token-aware CLI proxy; trims output for LLMs
+typos = "latest"         # Source code spell checker
+vale = "latest"          # Prose linter for documentation
+
+# Shell and terminal UX
+starship = "latest"   # Minimal cross-shell prompt
+zoxide = "latest"     # Smarter `cd` that learns your dirs
+fzf = "latest"        # Fuzzy finder for files, history, git refs
+bat = "latest"        # `cat` with syntax highlighting and paging
+bat-extras = "latest" # Extra bat helpers (batdiff, batman, prettyping, ...)
+eza = "latest"        # Modern `ls` replacement
+fd = "latest"         # Fast, user-friendly `find` alternative
+rg = "latest"         # Fast `grep` alternative (ripgrep)
+yq = "latest"         # Process YAML/JSON/XML/CSV on the CLI
+tlrc = "latest"       # Concise man pages (tldr in Rust)
+usage = "latest"      # Generate and inspect CLI usage strings
+cheat = "latest"      # Interactive community cheatsheets
+
+# AI assistants
+opencode = "latest"        # AI coding assistant
+aichat = "latest"          # Unified CLI chat for many LLM providers
+antigravity-cli = "latest" # Google's terminal AI agent for code editing
+
+# Security
+"pipx:detect-secrets" = "latest" # Prevent secrets from being committed
+betterleaks = "latest"           # Fast configurable secrets scanner
+
+# Version control
+cocogitto = "latest" # Conventional Commits toolbox (commits, bump, changelog)
+lefthook = "latest"  # Fast parallel Git hooks manager

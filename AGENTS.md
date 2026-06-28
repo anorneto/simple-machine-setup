@@ -99,8 +99,9 @@ agents need to see the reasoning to avoid reverting the decision.
 ## Build & test
 
 - `mise run build` builds the binary into `dist/zimvor`.
-- `mise run test` runs `go test ./...`.
-- `go vet ./...` should always pass before committing.
+- `mise run test` runs `rtk go test ./...`.
+- `mise run lint` runs `rtk golangci-lint run`.
+- Both `rtk go vet ./...` and `mise run lint` should always pass for code changes.
 - Add a unit test for any new exported function or any new branch in an
   existing one.
 
@@ -111,6 +112,9 @@ agents need to see the reasoning to avoid reverting the decision.
   implementations that would benefit.
 - No template engines, secret stores, plugin systems, or external
   config formats. (All are listed in `PROJECT_IDEAS.md` and intentionally
-  deferred.)
+  deferred.) The one exception is `text/template` in the `init` command
+  for one-shot scaffolding of the starter config — see
+  `cmd/zimvor/template.toml`. Template rendering inside dotfile content
+  is still v2+.
 - No commits that change behavior without updating `README.md` if the
   user-facing surface changes.

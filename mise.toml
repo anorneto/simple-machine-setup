@@ -1,6 +1,3 @@
-[tools]
-go = "latest"
-
 [tasks.build]
 description = "Build zimvor for current platform"
 run = """
@@ -53,16 +50,21 @@ GOOS=darwin GOARCH=arm64 go build -ldflags "-X main.version=$VERSION -X main.com
 
 [tasks.build-all]
 description = "Cross-compile for all targets"
-depends = ["build:linux-amd64", "build:linux-arm64", "build:darwin-amd64", "build:darwin-arm64"]
+depends = [
+  "build:linux-amd64",
+  "build:linux-arm64",
+  "build:darwin-amd64",
+  "build:darwin-arm64",
+]
 
 [tasks.test]
 description = "Run tests"
-run = "go test ./..."
+run = "rtk go test ./..."
 
 [tasks.lint]
 description = "Run linter"
-run = "golangci-lint run"
+run = "rtk golangci-lint run"
 
 [tasks.clean]
 description = "Remove build artifacts"
-run = "rm -rf dist/"
+run = "rtk rm -rf dist/"

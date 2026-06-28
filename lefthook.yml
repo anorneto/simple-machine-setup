@@ -1,0 +1,55 @@
+output:
+  - failure
+  - summary
+
+pre-commit:
+  parallel: true
+  jobs:
+    - name: gofmt
+      glob: "*.go"
+      run: gofmt -w {staged_files}
+      stage_fixed: true
+
+    - name: golangci-lint (changed files)
+      glob: "*.go"
+      run: golangci-lint run --new-from-rev=HEAD
+
+    - name: go mod tidy on go.mod/go.sum change
+      glob: "go.{mod,sum}"
+      run: |
+        go mod tidy
+        git add go.mod go.sum
+
+    - name: typos (warn only)
+      run: typos {staged_files} || true
+
+    - name: betterleaks
+      run: |
+        if ! output=$(betterleaks git --pre-commit --redact --staged --verbose 2>&1); then
+          echo "$output"
+          exit 1
+        fi
+
+    - name: vale (warn only)
+      glob: "*.md"
+      run: vale --no-exit {staged_files} || true
+
+pre-push:
+  parallel: true
+  jobs:
+    - name: go test
+      run: go test ./...
+
+    - name: version bump reminder (warn only)
+      run: |
+        if command -v cog &>/dev/null; then
+          result=$(cog bump --auto --dry-run 2>&1) || true
+          if echo "$result" | grep -q "next version"; then
+            echo "ℹ️  Pending version bump detected. Run 'mise run bump' when ready to release."
+          fi
+        fi
+
+commit-msg:
+  jobs:
+    - name: cog check
+      run: cog check

@@ -192,7 +192,7 @@ mise run test
 mise run build-all
 
 # Static analysis
-go vet ./...
+rtk go vet ./...
 ```
 
 ## License
