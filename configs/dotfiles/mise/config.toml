@@ -13,11 +13,14 @@ uv = "latest"   # Fast Python package manager
 pipx = "latest" # Install Python CLI apps in isolated venvs
 
 # Linters and code analysis
-ast-grep = "latest"      # Structural code search/rewrite via AST patterns
-golangci-lint = "latest" # Aggregated Go linter runner
-rtk = "latest"           # Token-aware CLI proxy; trims output for LLMs
-typos = "latest"         # Source code spell checker
-vale = "latest"          # Prose linter for documentation
+ast-grep = "latest"                  # Structural code search/rewrite via AST patterns
+golangci-lint = "latest"             # Aggregated Go linter runner
+gofumpt = "latest"                   # Stricter gofmt superset
+"go:golang.org/x/vuln/cmd/govulncheck@latest" = "latest" # Go vulnerability scanner (CVEs in deps)
+rtk = "latest"                       # Token-aware CLI proxy; trims output for LLMs
+typos = "latest"                     # Source code spell checker
+rumdl = "latest"                     # Fast Markdown linter and formatter
+vale = "latest"                      # Prose linter for documentation
 
 # Shell and terminal UX
 starship = "latest"   # Minimal cross-shell prompt

@@ -5,14 +5,20 @@ output:
 pre-commit:
   parallel: true
   jobs:
-    - name: gofmt
+    - name: gofumpt
       glob: "*.go"
-      run: gofmt -w {staged_files}
+      run: gofumpt -w {staged_files}
+      stage_fixed: true
+
+    - name: goimports
+      glob: "*.go"
+      run: goimports -w -local github.com/anorneto/zimvor {staged_files}
       stage_fixed: true
 
     - name: golangci-lint (changed files)
       glob: "*.go"
-      run: golangci-lint run --new-from-rev=HEAD
+      run: golangci-lint run --new-from-rev=HEAD --fix
+      stage_fixed: true
 
     - name: go mod tidy on go.mod/go.sum change
       glob: "go.{mod,sum}"
@@ -34,9 +40,17 @@ pre-commit:
       glob: "*.md"
       run: vale --no-exit {staged_files} || true
 
+    - name: rumdl
+      glob: "*.md"
+      run: rumdl check --fix {staged_files}
+      stage_fixed: true
+
 pre-push:
   parallel: true
   jobs:
+    - name: govulncheck
+      run: govulncheck ./...
+
     - name: go test
       run: go test ./...
 
