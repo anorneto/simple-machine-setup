@@ -17,12 +17,15 @@ post_package_bump_hooks = []
 [git_hooks]
 
 [commit_types]
+ai = { changelog_title = "AI" }
 improv = { changelog_title = "Improvements" }
 wip = { omit_from_changelog = true }
 doc = { changelog_title = "Documentation" }
 
 [changelog]
 path = "CHANGELOG.md"
-authors = []
+remote = "github.com"
+owner = "Anor Neto"
+authors = [{"username" = "Anor Neto", "signature" = "anornetoo@gmail.com"}]
 
 [bump_profiles]

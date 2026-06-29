@@ -1,0 +1,19 @@
+# rumdl configuration — mostly defaults, with MD013 disabled because
+# code-adjacent docs often need long lines (command output, file paths, URLs).
+
+[global]
+exclude = [
+    ".git",
+    ".github",
+    "node_modules",
+    "vendor",
+    "dist",
+    "build",
+    "CHANGELOG.md",
+    "LICENSE.md",
+]
+respect-gitignore = true
+
+disable = [
+    "MD013", # line length — long paths and code blocks are common in docs
+]
