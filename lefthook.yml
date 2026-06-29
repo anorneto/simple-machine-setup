@@ -6,16 +6,6 @@ output:
 pre-commit:
   parallel: true
   jobs:
-    - name: gofumpt
-      glob: "*.go"
-      run: gofumpt -w {staged_files}
-      stage_fixed: true
-
-    - name: goimports
-      glob: "*.go"
-      run: goimports -w -local github.com/anorneto/zimvor {staged_files}
-      stage_fixed: true
-
     - name: golangci-lint (changed files)
       glob: "*.go"
       run: golangci-lint run --new-from-rev=HEAD --fix

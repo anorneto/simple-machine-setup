@@ -3,15 +3,23 @@ version: "2"
 run:
   timeout: 5m
   tests: true
+  go: '1.26'
+  modules-download-mode: readonly
 
 linters:
   default: none
   enable:
-    - errcheck
-    - govet
-    - ineffassign
-    - staticcheck
-    - unused
+    - errcheck     # check for unchecked errors
+    - govet        # standard Go vet checks
+    - ineffassign  # detect ineffectual assignments
+    - staticcheck  # advanced static analysis (covers gosimple + stylecheck)
+    - unused       # find unused code
+    #- dupword     # catch duplicated words in comments
+    #- errorlint   # catch error handling mistakes (%v vs %w, etc.)
+    #- gosec       # security checks (command injection, file perms)
+    #- misspell    # catch common typos in comments/strings
+    #- unconvert   # catch unnecessary type conversions
+    #- wrapcheck   # catch unwrapped errors from external packages
 
   settings:
     govet:
@@ -20,6 +28,7 @@ linters:
         - fieldalignment
 
   exclusions:
+    warn-unused: true
     rules:
       - path: _test\.go
         linters:
@@ -29,14 +38,18 @@ linters:
 
 formatters:
   enable:
-    - gofmt
-    - gofumpt
-    - goimports
+    - gofmt       # standard Go formatting
+    - gofumpt     # stricter gofmt superset
+    - goimports   # organize and group imports
 
   settings:
     gofumpt:
       simplify: true
 
+  exclusions:
+    generated: strict
+
 issues:
+  uniq-by-line: true
   max-issues-per-linter: 0
   max-same-issues: 0
