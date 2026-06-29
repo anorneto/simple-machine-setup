@@ -25,19 +25,19 @@ binary = "mise"
 install = ["curl https://mise.run | sh"]
 
 [[dotfiles]]
-id = "fish-config"
-source = "dotfiles/fish/config.fish"
-target = "~/.config/fish/config.fish"
-
-[[dotfiles]]
-id = "fish-aliases"
-source = "dotfiles/fish/aliases.fish"
-target = "~/.config/fish/alias.fish"
+id = "fish-configs"
+source = "dotfiles/fish"
+target = "~/.config/fish"
 
 [[dotfiles]]
 id = "mise-config"
-source = "dotfiles/mise/config.toml"
+source = "dotfiles/mise.toml"
 target = "~/.config/mise/config.toml"
+
+[[dotfiles]]
+id = "starship-config"
+source = "dotfiles/starship.toml"
+target = "~/.config/starship.toml"
 
 [[tasks]]
 id = "set-fish-default"
@@ -56,3 +56,46 @@ id = "mise-fish-completions"
 description = "Generate mise fish completions"
 stage = "post"
 command = "mkdir -p ~/.config/fish/completions && mise completion fish > ~/.config/fish/completions/mise.fish"
+
+[[tasks]]
+id = "betterleaks-fish-completions"
+description = "Generate betterleaks fish completions"
+stage = "post"
+command = "mkdir -p ~/.config/fish/completions && mise exec -- betterleaks completion fish > ~/.config/fish/completions/betterleaks.fish"
+
+[[tasks]]
+id = "uv-fish-completions"
+description = "Generate uv fish completions"
+stage = "post"
+command = "mkdir -p ~/.config/fish/completions && mise exec -- uv generate-shell-completion fish > ~/.config/fish/completions/uv.fish"
+
+[[tasks]]
+id = "bun-fish-completions"
+description = "Generate bun fish completions"
+stage = "post"
+command = "mkdir -p ~/.config/fish/completions && mise exec -- bun completions"
+
+[[tasks]]
+id = "golangci-lint-fish-completions"
+description = "Generate golangci-lint fish completions"
+stage = "post"
+command = "mkdir -p ~/.config/fish/completions && mise exec -- golangci-lint completion fish > ~/.config/fish/completions/golangci-lint.fish"
+
+[[tasks]]
+id = "lefthook-fish-completions"
+description = "Generate lefthook fish completions"
+stage = "post"
+command = "mkdir -p ~/.config/fish/completions && mise exec -- lefthook completion fish > ~/.config/fish/completions/lefthook.fish"
+
+[[tasks]]
+id = "cocogitto-fish-completions"
+description = "Generate cocogitto fish completions"
+stage = "post"
+command = "mkdir -p ~/.config/fish/completions && mise exec -- cog generate-completions fish > ~/.config/fish/completions/cog.fish"
+
+[[tasks]]
+id = "bat-fish-completions"
+description = "Generate bat fish completions"
+stage = "post"
+command = "mkdir -p ~/.config/fish/completions && mise exec -- bat --completion fish > ~/.config/fish/completions/bat.fish"
+

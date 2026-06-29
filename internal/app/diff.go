@@ -7,10 +7,12 @@ import (
 	"github.com/pmezard/go-difflib/difflib"
 )
 
-// Unified produces a colored unified diff between two strings.
+// TODO(anor): this difflib is old.. should we make one?
+
+// ColorizeDiff produces a colored unified diff between two strings.
 // `label` is used as the filename in the diff header (e.g. the dotfile path).
 // Returns an empty string if the contents are identical.
-func Unified(label, oldContent, newContent string) string {
+func ColorizeDiff(label, oldContent, newContent string) string {
 	d := difflib.UnifiedDiff{
 		A:        difflib.SplitLines(oldContent),
 		B:        difflib.SplitLines(newContent),

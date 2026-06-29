@@ -5,8 +5,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/anorneto/zimvor/internal/app"
 	"github.com/spf13/cobra"
+
+	"github.com/anorneto/zimvor/internal/app"
 )
 
 // Version metadata, set via -ldflags at build time.
@@ -18,6 +19,7 @@ var (
 
 // Global flags. `apply=false` is the default — `install` is dry-run unless
 // the user explicitly passes --apply.
+// configDir is the explicit --config value, or empty to auto-detect.
 var (
 	applyFlag bool
 	yesFlag   bool
@@ -163,8 +165,8 @@ func versionCmd() *cobra.Command {
 // newApply loads the config for the current OS and constructs an app.Apply.
 // It bails out with a friendly error if the file is missing or invalid.
 func newApply() (*app.Apply, error) {
-	configsDir := getConfigDir()
-	configFile := filepath.Join(configsDir, app.ConfigFileName())
+	configsDir := app.ConfigDir(configDir)
+	configFile := filepath.Join(configsDir, app.GetOSConfigFile())
 
 	cfg, err := app.Load(configFile)
 	if err != nil {
@@ -179,12 +181,4 @@ func newApply() (*app.Apply, error) {
 	}
 
 	return app.NewApply(cfg, applyFlag, yesFlag, configsDir), nil
-}
-
-// getConfigDir returns the explicit --config value, or auto-detects.
-func getConfigDir() string {
-	if configDir != "" {
-		return configDir
-	}
-	return app.FindConfigPath()
 }

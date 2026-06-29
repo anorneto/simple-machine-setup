@@ -17,6 +17,7 @@ ast-grep = "latest"                  # Structural code search/rewrite via AST pa
 golangci-lint = "latest"             # Aggregated Go linter runner
 gofumpt = "latest"                   # Stricter gofmt superset
 "go:golang.org/x/vuln/cmd/govulncheck@latest" = "latest" # Go vulnerability scanner (CVEs in deps)
+"go:golang.org/x/tools/cmd/goimports@latest" = "latest"
 rtk = "latest"                       # Token-aware CLI proxy; trims output for LLMs
 typos = "latest"                     # Source code spell checker
 rumdl = "latest"                     # Fast Markdown linter and formatter

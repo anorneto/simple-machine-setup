@@ -2,14 +2,15 @@ package main
 
 import (
 	"bytes"
-	_ "embed"
+	_ "embed" // the _ before embed is required to use the //go:embed directive
 	"fmt"
 	"os"
 	"path/filepath"
 	"text/template"
 
-	"github.com/anorneto/zimvor/internal/app"
 	"github.com/spf13/cobra"
+
+	"github.com/anorneto/zimvor/internal/app"
 )
 
 //go:embed template.toml
@@ -25,18 +26,18 @@ type starterVars struct {
 
 // initCmd scaffolds a starter TOML config for the current OS.
 func initCmd() *cobra.Command {
-
 	runInit := func(cmd *cobra.Command, args []string) error {
-		configsDir := getConfigDir()
-		if err := os.MkdirAll(configsDir, 0755); err != nil {
+		// TODO(anor): maybe have an env var to set config dir?
+		configsDir := app.ConfigDir(configDir)
+		if err := os.MkdirAll(configsDir, 0o755); err != nil {
 			return fmt.Errorf("failed to create configs dir: %w", err)
 		}
-		if err := os.MkdirAll(filepath.Join(configsDir, "dotfiles"), 0755); err != nil {
+		if err := os.MkdirAll(filepath.Join(configsDir, "dotfiles"), 0o755); err != nil {
 			return fmt.Errorf("failed to create dotfiles dir: %w", err)
 		}
 
-		osName := app.Detect()
-		configPath := filepath.Join(configsDir, app.ConfigFileName())
+		osName := app.DetectOS()
+		configPath := filepath.Join(configsDir, app.GetOSConfigFile())
 
 		if _, err := os.Stat(configPath); err == nil {
 			return fmt.Errorf("config already exists: %s (refusing to overwrite)", configPath)
@@ -54,7 +55,7 @@ func initCmd() *cobra.Command {
 			return fmt.Errorf("failed to render starter config: %w", err)
 		}
 
-		if err := os.WriteFile(configPath, rendered, 0644); err != nil {
+		if err := os.WriteFile(configPath, rendered, 0o644); err != nil {
 			return fmt.Errorf("failed to write config: %w", err)
 		}
 

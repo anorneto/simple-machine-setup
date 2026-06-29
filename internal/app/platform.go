@@ -2,14 +2,14 @@ package app
 
 import "runtime"
 
-// Detect returns the current OS as reported by Go's runtime
-// (one of: "linux", "darwin", "windows", "freebsd", ...).
-func Detect() string {
+// DetectOS returns the current OS as reported by Go's runtime
+// (one of: "linux", "darwin", "windows", ...).
+func DetectOS() string {
 	return runtime.GOOS
 }
 
-// ConfigFileName returns the platform-specific manifest filename
+// GetOSConfigFile returns the platform-specific manifest filename
 // (e.g. "linux.toml" on Linux, "darwin.toml" on macOS).
-func ConfigFileName() string {
-	return Detect() + ".toml"
+func GetOSConfigFile() string {
+	return DetectOS() + ".toml"
 }

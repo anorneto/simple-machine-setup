@@ -1,0 +1,129 @@
+# Starship Prompt Configuration
+# Tailored for Python & Go developers using Zimvor, Mise, Lefthook, and Cocogitto.
+
+# Get editor / shell completions for starship.toml
+# "$schema" = 'https://starship.rs/config-schema.json'
+
+# --- Layout & Prompt ---
+# A clean, modern prompt layout. 
+# We place language runtimes, directory status, git, and custom tools in the main line.
+format = """
+$sudo\
+$directory\
+$git_branch\
+$git_status\
+$git_state\
+$python\
+$golang\
+$mise\
+$custom\
+$fill\
+$cmd_duration\
+$jobs\
+$battery\
+$time\
+$line_break\
+$character"""
+
+# Move the exit status to the right side of the screen if you like,
+# or we can keep the right_format empty.
+right_format = """"""
+
+# --- Directory ---
+[directory]
+style = "bold cyan"
+truncation_length = 4
+truncate_to_repo = true # Stop truncating at the repository root
+read_only = "🔒"
+read_only_style = "red"
+
+# --- Git Modules ---
+[git_branch]
+style = "bold purple"
+
+[git_status]
+format = '([\[$all_status$ahead_behind\]]($style) )'
+style = "bold red"
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+conflicted = "⚔ "
+untracked = "?"
+staged = "+"
+modified = "!"
+renamed = "»"
+deleted = "✘"
+
+# --- Python Module ---
+[python]
+symbol = "🐍 "
+style = "bold yellow"
+# Display Python version and virtual environment name if active
+format = "via [${symbol}${pyenv_prefix}(${version} )(\\($virtualenv\\) )]($style)"
+pyenv_version_name = true
+# Auto-detect triggers for python projects
+detect_extensions = ["py", "ipynb"]
+detect_files = ["pyproject.toml", "requirements.txt", "Pipfile", "__init__.py", ".python-version"]
+
+# --- Go Module ---
+[golang]
+style = "bold cyan" # Sleek light blue / cyan
+format = "via [$symbol($version )]($style)"
+detect_files = ["go.mod", "go.sum", "go.work", "glide.yaml", "Gopkg.toml"]
+
+# --- Mise Module ---
+# Displays active tool versions managed by Mise
+[mise]
+disabled = false
+symbol = "👨‍🍳 mise "
+style = "bold purple"
+format = "via [$symbol($version )]($style)"
+
+# --- Fill ---
+# Pushes the command duration, jobs, etc. to the right
+[fill]
+symbol = " "
+
+# --- Command Duration ---
+[cmd_duration]
+min_time = 1_000 # Only show if command took more than 1s
+format = "took [$duration](bold yellow) "
+show_notifications = true
+min_time_to_notify = 30_000 # show notifications for commands taking more than 30s
+
+# --- Custom Modules for Developer's Tools ---
+
+# 1. Lefthook Git Hooks Detector
+[custom.lefthook]
+detect_files = ["lefthook.yml"]
+symbol = "🪝 lefthook "
+style = "bold green"
+format = "[$symbol]($style)"
+
+# 2. Cocogitto Conventional Commits Detector
+[custom.cocogitto]
+detect_files = ["cog.toml"]
+symbol = "⚙️ cog "
+style = "bold cyan"
+format = "[$symbol]($style)"
+
+# 3. Golangci-lint Config Detector
+[custom.golangci]
+detect_files = [".golangci.yml", ".golangci.yaml", ".golangci.toml"]
+symbol = "🩺 golangci "
+style = "bold orange"
+format = "[$symbol]($style)"
+
+# 4. Zimvor Project Indicator (Working on this exact CLI)
+[custom.zimvor]
+detect_files = ["configs/linux.toml", "configs/darwin.toml"]
+symbol = "🌀 zimvor "
+style = "bold magenta"
+format = "[$symbol]($style)"
+
+# --- Sudo Module ---
+[sudo]
+disabled = false
+symbol = "🧙 "
+style = "bold blue"
+format = "as [$symbol]($style) "

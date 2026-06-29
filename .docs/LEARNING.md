@@ -90,10 +90,10 @@ Follow this progression to build your Go skills using Zimvor:
 * **Goal:** Understand Go's basic structures, packages, and patterns.
 * **Exercises:**
   * [x] 1. Open [internal/app/platform.go](../internal/app/platform.go). See how a 15-line file uses `runtime.GOOS` to detect the OS and returns a platform-specific filename. Notice how the package declaration and imports work.
-  * [ ] 2. Open [internal/app/config.go](../internal/app/config.go). Look at the struct tags (e.g. ``toml:"meta"``) which tell the TOML parser how to map keys. Study the `Validate()` method — how strings are trimmed, how errors are collected into one joined error so the user fixes everything in one pass.
-  * [ ] 3. Open [internal/app/styles.go](../internal/app/styles.go). See how package-level `var` blocks define lipgloss styles. Notice how `Header` is used across multiple files in the same package without imports — a direct demonstration of Go's package scope.
-  * [ ] 4. Open [internal/app/prompt.go](../internal/app/prompt.go). Learn how `bufio.Reader` reads from `os.Stdin`, how `strings.TrimSpace` + `strings.ToLower` normalizes input, and how `autoYes` skips interactive prompts for scripted runs.
-  * [ ] 5. Open [internal/app/diff.go](../internal/app/diff.go). See a third-party library import (`go-difflib`), how a struct literal is constructed (`difflib.UnifiedDiff{...}`), and how `switch` on string prefix with `strings.HasPrefix` handles per-line styling.
+  * [x] 2. Open [internal/app/config.go](../internal/app/config.go). Look at the struct tags (e.g. ``toml:"meta"``) which tell the TOML parser how to map keys. Study the `Validate()` method — how strings are trimmed, how errors are collected into one joined error so the user fixes everything in one pass.
+  * [x] 3. Open [internal/app/styles.go](../internal/app/styles.go). See how package-level `var` blocks define lipgloss styles. Notice how `Header` is used across multiple files in the same package without imports — a direct demonstration of Go's package scope.
+  * [x] 4. Open [internal/app/prompt.go](../internal/app/prompt.go). Learn how `bufio.Reader` reads from `os.Stdin`, how `strings.TrimSpace` + `strings.ToLower` normalizes input, and how `autoYes` skips interactive prompts for scripted runs.
+  * [x] 5. Open [internal/app/diff.go](../internal/app/diff.go). See a third-party library import (`go-difflib`), how a struct literal is constructed (`difflib.UnifiedDiff{...}`), and how `switch` on string prefix with `strings.HasPrefix` handles per-line styling.
 
 ### 🟩 Phase 2: Study a SOLID/KISS Refactoring
 
@@ -138,3 +138,38 @@ Keep these behaviors in mind as you write Go:
 * **The Zero Value:** Go has no `None` (except for pointers, interfaces, and maps which can be `nil`). Variables declared without an explicit initial value get a default **Zero Value** (`""` for strings, `0` for numbers, `false` for booleans, empty structs for struct types).
 * **Variable Shadowing:** Using the short variable declaration operator `:=` inside an `if` or `for` block can accidentally create a new local variable that "shadows" an outer variable of the same name.
 * **`defer` Statements:** Go's `defer` schedules a function call to run immediately before the surrounding function returns. It is often used to close files or clean up locks, similar to Python's `with` statement.
+* **No Enums:** Go does not have native enum types. Use `const` with `iota` for auto-incrementing integer constants, or `type Name string` with explicit string constants:
+
+  ```go
+  // Integer-based enum
+  type Color int
+  const (
+      Red   Color = iota // 0
+      Green              // 1
+      Blue               // 2
+  )
+
+  // String-based enum (useful for serialization)
+  type Stage string
+  const (
+      StagePre  Stage = "pre"
+      StagePost Stage = "post"
+  )
+  func (s Stage) Valid() bool {
+      switch s {
+      case StagePre, StagePost: return true
+      default: return false
+      }
+  }
+  ```
+
+* **No Set type:** Go does not have a built-in set. Use `map[Type]bool` as a set instead:
+
+  ```go
+  seen := make(map[string]bool)      // initialize
+  seen["git"] = true                 // add
+  if seen["git"] { ... }             // check existence — defaults to false if not present
+  delete(seen, "git")                // remove
+  ```
+
+  The zero value for a missing key is `false`, so `if seen["missing"]` evaluates to `false` — no need for a separate `ok` check when using it as a boolean condition. This pattern appears in `Config.Validate()` for duplicate ID detection.

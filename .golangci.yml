@@ -1,40 +1,42 @@
+version: "2"
+
 run:
   timeout: 5m
   tests: true
 
 linters:
+  default: none
   enable:
-    - errcheck      # Check for unchecked errors
-    - gosimple      # Simplify code
-    - govet         # Standard Go vet
-    - ineffassign   # Detect ineffectual assignments
-    - staticcheck   # Advanced static analysis
-    - unused        # Find unused code
+    - errcheck
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
 
   settings:
     govet:
       enable-all: true
       disable:
-        - fieldalignment  # Too noisy, rarely actionable
+        - fieldalignment
+
+  exclusions:
+    rules:
+      - path: _test\.go
+        linters:
+          - errcheck
+          - ineffassign
+          - staticcheck
 
 formatters:
   enable:
     - gofmt
-    - gofumpt   # Stricter gofmt superset
+    - gofumpt
     - goimports
 
   settings:
     gofumpt:
       simplify: true
-    goimports:
-      local-prefixes: github.com/anorneto/zimvor
 
 issues:
-  exclude-rules:
-    - path: _test\.go
-      linters:
-        - errcheck
-        - ineffassign
-        - staticcheck
   max-issues-per-linter: 0
   max-same-issues: 0

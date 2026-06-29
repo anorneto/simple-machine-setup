@@ -25,5 +25,13 @@ func Confirm(message string, autoYes bool) bool {
 	}
 
 	response = strings.TrimSpace(strings.ToLower(response))
-	return response == "y" || response == "yes"
+	switch response {
+	case "y", "yes":
+		return true
+	case "n", "no":
+		return false
+	default:
+		fmt.Printf("Please answer %s or %s.", Prompt.Render("[y/yes]"), Prompt.Render("[n/no]"))
+		return Confirm(message, autoYes)
+	}
 }
